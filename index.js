@@ -1,13 +1,16 @@
-const express = require("express");
-const app = express();
+const express = require("express")
+const mongoose =  require('mongoose')
+const key  =  require('./config/key')
 
-require('./routes/authRoute')
+
+require('./models/User')
+
+mongoose.connect(key.mongoURI)
 
 //https://console.developers.google.com
-
-
-require('../server/services/passport')(app)
-
-const PORT = process.env.PORT || 5000;
+const app = express();
+require('../server/services/passport')
+require('./routes/authRoute')(app)
+const PORT = process.env.PORT || 5000
 
 app.listen(PORT);
