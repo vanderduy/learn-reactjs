@@ -14,10 +14,20 @@ passport.use(
     (accessToken, refreshToken, profile, done) => {
       // console.log('accessToken :' , accessToken);
       // console.log('refreshToken :' , refreshToken);
-      console.log("profile :", profile);
-      new User({
-        googleId: profile.id
-      }).save();
+      //console.log("profile :", profile);
+      User.findOne({googleId: profile.id})
+      .then(exist =>{
+        if(exist){
+          //we already have this record
+          done(null,exist)
+        } else {
+          //we don't have this ID
+          new User({ googleId: profile.id })
+          .save()
+          .then(user=> done(null,User))
+        }
+      })
+      
     }
   )
 );
